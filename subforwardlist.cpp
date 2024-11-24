@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <random>
 #include <chrono>
 
@@ -20,9 +20,9 @@ class subforwardlist {
 public:
     Node* begin;
     Node* end;
-    unsigned int size;
+    unsigned int sizze;
     //конструктор
-    subforwardlist() : begin(nullptr), end(nullptr), size(0){}
+    subforwardlist() : begin(nullptr), end(nullptr), sizze(0){}
     //деструктор
     ~subforwardlist() {
         Node* x = begin;
@@ -33,7 +33,7 @@ public:
         }
         begin = nullptr;
         end = nullptr;
-        size = 0;
+        sizze = 0;
     }
     //explicit
     explicit subforwardlist(int c) :subforwardlist() {
@@ -56,7 +56,7 @@ public:
             return *this;
         }
         end = begin;
-        size = 0;
+        sizze = 0;
         swap(rhs);
         return *this;
     }
@@ -70,7 +70,7 @@ public:
             return *this;
         }
         end = begin;
-        size = 0;
+        sizze = 0;
         Node* copy = rhs.begin;
         while (copy != rhs.end) {
             push_back(copy->data);
@@ -81,11 +81,11 @@ public:
     void swap(subforwardlist& rhs) noexcept {
         std::swap(begin, rhs.begin);
         std::swap(end, rhs.end);
-        std::swap(size, rhs.size);
+        std::swap(sizze, rhs.sizze);
     }
     // далее описание методов (и только их!)
     void push_back(const T& data) {
-        size++;
+        sizze++;
         if (end != nullptr) {
             if (end->next != nullptr) {
                 end->data = data;
@@ -104,52 +104,55 @@ public:
         end = newend;
     } // добавление элемента в конец
     T pop_back() {
-        if (size == 0) {
+        if (sizze == 0) {
             return T{};
         }
-        size--;
+        sizze--;
         Node* copy = begin;
-        if (size==0) {
+        if (sizze==0) {
             T x = copy->data;
             copy->data = T{};
             end = copy;
             return x;
         }
-        while (copy->next->next != end_) {
+        while (copy->next->next != end) {
             copy = copy->next;
         }
         T x = copy->next->data;
         copy->next->data = T{};
-        end_ = copy->next;
+        end = copy->next;
         copy->next = end;
         return x;
     }  // удаление элемента с конца (если пустой -- возвращать T{} (default конструирование объекта типа T))
     void push_forward(const T& data) {
-        if (size == 0) {
+        if (sizze == 0) {
             push_back(data);
             return;
         }
-        size++;
-        Node* newnode = new Node{ data, begin_ };
+        sizze++;
+        Node* newnode = new Node{ data, begin};
         begin = newnode;
     }//добавление элемента в начало недосписка
     T pop_forward() {
-        if (size_ == 0) {
+        if (sizze == 0) {
             return T{};
         }
-        size--;
-        T x = begin_->data;
-        Node* copy = begin_;
+        sizze--;
+        T x = begin->data;
+        Node* copy = begin;
         begin = begin->next;
         delete copy;
         return x;
+    }
+    unsigned int size() const{
+        return sizze;
     }
 
 
         //удаление элемента из начала недосписка (если пустой -- возвращать T{} (default конструирование объекта типа T))
         void push_where(unsigned int where, const T& data) {
-        if (where > size) {
-            where = size;
+        if (where > sizze) {
+            where = sizze;
         }
         if (where == 0) {
             push_forward(data);
@@ -162,16 +165,16 @@ public:
         }
         newnode->next = copy->next;
         copy->next = newnode;
-        size++;
+        sizze++;
     }//добавение элемента с порядковым номером where
     T erase_where(unsigned int where) {
-        if (size == 0 || where >= size ) {
+        if (sizze == 0 || where >= sizze ) {
             return T{};
         }
         if (where == 0) {
             return pop_forward();
         }
-        Node* copy = begin_;
+        Node* copy = begin;
         for (unsigned int i = 0; i < where - 1;i++) {
             copy = copy->next;
         }
@@ -180,12 +183,9 @@ public:
         copy->next = newnode->next;
         delete newnode;
         newnode = nullptr;
-        size--;
+        sizze--;
         return data;
     }//удаление элемента с порядковым номером where (если пустой -- возвращать T{} (default конструирование объекта типа T))
-    unsigned int size() const {
-        return size;
-    }//определить размер недосписка
 };
 using list = subforwardlist<int>;
 using std::cout;
