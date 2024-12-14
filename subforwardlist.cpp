@@ -16,13 +16,13 @@ class subforwardlist {
         // сюда можете написать что угодно для вашего удобства, нет органичений по списку методов
     };
 
-
-public:
+private:
     Node* begin;
     Node* end;
     unsigned int sizze;
+public:
     //конструктор
-    subforwardlist() : begin(nullptr), end(nullptr), sizze(0){}
+    subforwardlist() : begin(nullptr), end(nullptr), sizze(0) {}
     //деструктор
     ~subforwardlist() {
         Node* x = begin;
@@ -31,16 +31,13 @@ public:
             delete x;
             x = ne;
         }
-        begin = nullptr;
-        end = nullptr;
-        sizze = 0;
     }
     //explicit
     explicit subforwardlist(int c) :subforwardlist() {
         for (int i = 0; i < c; i++) {
             push_back(T{});
         }
- 
+
     }
     //копирование
     subforwardlist(const subforwardlist& rhs) : subforwardlist() {
@@ -55,8 +52,6 @@ public:
         if (this == &rhs) {
             return *this;
         }
-        end = begin;
-        sizze = 0;
         swap(rhs);
         return *this;
     }
@@ -100,7 +95,7 @@ public:
         Node* newnode = new Node{ data, nullptr };
         Node* newend = new Node{ T{}, nullptr };
         newnode->next = newend;
-        begin= newnode;
+        begin = newnode;
         end = newend;
     } // добавление элемента в конец
     T pop_back() {
@@ -109,7 +104,7 @@ public:
         }
         sizze--;
         Node* copy = begin;
-        if (sizze==0) {
+        if (sizze == 0) {
             T x = copy->data;
             copy->data = T{};
             end = copy;
@@ -130,7 +125,7 @@ public:
             return;
         }
         sizze++;
-        Node* newnode = new Node{ data, begin};
+        Node* newnode = new Node{ data, begin };
         begin = newnode;
     }//добавление элемента в начало недосписка
     T pop_forward() {
@@ -144,13 +139,13 @@ public:
         delete copy;
         return x;
     }
-    unsigned int size() const{
+    unsigned int size() const {
         return sizze;
     }
 
 
-        //удаление элемента из начала недосписка (если пустой -- возвращать T{} (default конструирование объекта типа T))
-        void push_where(unsigned int where, const T& data) {
+    //удаление элемента из начала недосписка (если пустой -- возвращать T{} (default конструирование объекта типа T))
+    void push_where(unsigned int where, const T& data) {
         if (where > sizze) {
             where = sizze;
         }
@@ -168,7 +163,7 @@ public:
         sizze++;
     }//добавение элемента с порядковым номером where
     T erase_where(unsigned int where) {
-        if (sizze == 0 || where >= sizze ) {
+        if (sizze == 0 || where >= sizze) {
             return T{};
         }
         if (where == 0) {
